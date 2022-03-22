@@ -28,14 +28,12 @@ class Solution {
 
     // Implement this method:
     public static String pigLatinize(String phrase) {
-        List<String> vowels = new ArrayList<>(List.of("a","e","i","o","u"));
         String[] words = phrase.split(" ");
         List<String> pigLatinedWords = new ArrayList<>();
         for(String word: words) {
             word = " " + word;
             String[] sets = word.split("(?i)(?=[aeiou])");
-            sets[0] = sets[0].replace(" ", "");
-            if(sets[0].length() == 0) {
+            if(sets[0].length() == 1) {
                 pigLatinedWords.add(word.replace(" ","") + "-way");
             } else {
                 pigLatinedWords.add(sets[1] + "-" + sets[0] + "ay");
