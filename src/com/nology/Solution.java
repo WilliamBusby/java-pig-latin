@@ -32,9 +32,11 @@ class Solution {
         String[] words = phrase.split(" ");
         List<String> pigLatinedWords = new ArrayList<>();
         for(String word: words) {
-            String[] sets = word.split("(?=[aeiou])");
-            if(vowels.contains(String.valueOf(word.toLowerCase(Locale.ROOT).charAt(0)))) {
-                pigLatinedWords.add(word + "-way");
+            word = " " + word;
+            String[] sets = word.split("(?i)(?=[aeiou])");
+            sets[0] = sets[0].replace(" ", "");
+            if(sets[0].length() == 0) {
+                pigLatinedWords.add(word.replace(" ","") + "-way");
             } else {
                 pigLatinedWords.add(sets[1] + "-" + sets[0] + "ay");
             }
