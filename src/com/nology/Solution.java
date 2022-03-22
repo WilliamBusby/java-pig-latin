@@ -23,6 +23,7 @@ class Solution {
         System.out.println(pigLatinize("pig")); // should print out "ig-pay"
         System.out.println(pigLatinize("pig latin"));
         System.out.println(pigLatinize("Pig Latin"));
+        System.out.println(pigLatinize("Atest"));
     }
 
     // Implement this method:
@@ -31,18 +32,11 @@ class Solution {
         String[] words = phrase.split(" ");
         List<String> pigLatinedWords = new ArrayList<>();
         for(String word: words) {
-            if(vowels.contains(String.valueOf(word.toLowerCase(Locale.ROOT).charAt(0)))) {
+            String[] sets = word.split("(?=[aeiou])");
+            if(sets[0].length()==0) {
                 pigLatinedWords.add(word + "-way");
             } else {
-                String[] chars = word.split("");
-                StringBuilder newString = new StringBuilder();
-                for(int j = 0; j<chars.length; j++) {
-                    if(vowels.contains(chars[j].toLowerCase(Locale.ROOT))) {
-                        newString.append(word, j, chars.length).append("-").append(word,0,j).append("ay");
-                        break;
-                    }
-                }
-                pigLatinedWords.add(String.valueOf(newString));
+                pigLatinedWords.add(sets[1] + "-" + sets[0] + "ay");
             }
         }
         return String.join(" ", pigLatinedWords);
