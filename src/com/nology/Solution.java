@@ -38,20 +38,12 @@ class Solution {
                 StringBuilder newString = new StringBuilder();
                 for(int j = 0; j<chars.length; j++) {
                     if(vowels.contains(chars[j].toLowerCase(Locale.ROOT))) {
-                        for(int k = j; k< chars.length; k++) {
-                            newString.append(chars[k]);
-                        }
-                        newString.append("-");
-                        for(int l = 0; l<j; l++) {
-                            newString.append(chars[l]);
-                        }
-                        newString.append("ay");
+                        newString.append(word, j, chars.length).append("-").append(word,0,j).append("ay");
                         break;
                     }
                 }
                 pigLatinedWords.add(String.valueOf(newString));
             }
-
         }
         return String.join(" ", pigLatinedWords);
     }
