@@ -33,7 +33,7 @@ class Solution {
         List<String> pigLatinedWords = new ArrayList<>();
         for(String word: words) {
             String[] sets = word.split("(?=[aeiou])");
-            if(sets[0].length()==0) {
+            if(vowels.contains(String.valueOf(word.toLowerCase(Locale.ROOT).charAt(0)))) {
                 pigLatinedWords.add(word + "-way");
             } else {
                 pigLatinedWords.add(sets[1] + "-" + sets[0] + "ay");
