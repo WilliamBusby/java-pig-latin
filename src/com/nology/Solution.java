@@ -23,7 +23,7 @@ class Solution {
         System.out.println(pigLatinize("pig")); // should print out "ig-pay"
         System.out.println(pigLatinize("pig latin"));
         System.out.println(pigLatinize("Pig Latin"));
-        System.out.println(pigLatinize("Atest"));
+        System.out.println(pigLatinize("Atest."));
     }
 
     // Implement this method:
@@ -34,11 +34,21 @@ class Solution {
             word = " " + word;
             String[] sets = word.split("(?i)(?=[aeiou])");
             if(sets[0].length() == 1) {
-                pigLatinedWords.add(word.replace(" ","") + "-way");
+                pigLatinedWords.add(punctuate(word.replace(" ","") + "-way"));
             } else {
-                pigLatinedWords.add(sets[1] + "-" + sets[0] + "ay");
+                pigLatinedWords.add(punctuate(sets[1] + "-" + sets[0].replace(" ", "") + "ay"));
             }
         }
         return String.join(" ", pigLatinedWords);
+    }
+
+    public static String punctuate(String word) {
+        if(word.contains(".")) {
+            return word.replace(".", "") + ".";
+        } else if(word.contains("!")){
+            return word.replace("!", "") + "!";
+        } else {
+            return word;
+        }
     }
 }
