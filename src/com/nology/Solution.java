@@ -24,38 +24,43 @@ package com.nology;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 class Solution {
     public static void main(String[] args) {
         System.out.println(pigLatinize("pig")); // should print out "ig-pay"
         System.out.println(pigLatinize("pig latin"));
-        System.out.println(pigLatinize("Pig Latin!"));
-//        System.out.println(pigLatinize("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget pulvinar ligula. Nulla velit tortor, convallis vel ipsum sit amet, feugiat ullamcorper nibh. Mauris porttitor orci nec augue eleifend, id laoreet est maximus. In hac habitasse platea dictumst. Morbi eu egestas velit. Praesent efficitur nunc eget libero sagittis, et condimentum turpis semper. Morbi pulvinar elit erat, rhoncus placerat nisi vestibulum a. Nam interdum finibus lacus quis vestibulum. Vestibulum dignissim, diam a pharetra fringilla, lacus tellus sodales metus, eu pretium nisi ante ut risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vivamus at massa at nulla pretium auctor. In ut euismod diam, sit amet posuere metus."));
+        System.out.println(pigLatinizeStream("Pig Latin!"));
+        System.out.println(pigLatinize("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget pulvinar ligula. Nulla velit tortor, convallis vel ipsum sit amet, feugiat ullamcorper nibh. Mauris porttitor orci nec augue eleifend, id laoreet est maximus. In hac habitasse platea dictumst. Morbi eu egestas velit. Praesent efficitur nunc eget libero sagittis, et condimentum turpis semper. Morbi pulvinar elit erat, rhoncus placerat nisi vestibulum a. Nam interdum finibus lacus quis vestibulum. Vestibulum dignissim, diam a pharetra fringilla, lacus tellus sodales metus, eu pretium nisi ante ut risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vivamus at massa at nulla pretium auctor. In ut euismod diam, sit amet posuere metus."));
     }
 
     // Implement this method:
     public static String pigLatinize(String phrase) {
-        String[] words = phrase.split(" ");
         List<String> pigLatinedWords = new ArrayList<>();
-        for(String word: words) {
-            word = " " + word;
-            String[] sets = word.split("(?i)(?=[aeiou])");
-            for(int i = 2; i<sets.length;i++) {
-                sets[1] += sets[i];
-            }
-            if(sets[0].length() == 1) {
-                pigLatinedWords.add(punctuate(word.replace(" ","") + "-way"));
-            } else {
-                pigLatinedWords.add(punctuate(sets[1] + "-" + sets[0].replace(" ", "") + "ay"));
-            }
+        for(String word: phrase.split(" ")) {
+            String[] charSet = word.split("(?i)(?=[aeiou])",2);
+            pigLatinedWords.add(punctuate(
+                    (word.matches("(?i)(?=[aeiou]).*"))
+                            ? (word + "-way")
+                            : (charSet[1] + "-" + charSet[0] + "ay")
+            ));
         }
         return String.join(" ", pigLatinedWords);
     }
 
+    public static String pigLatinizeStream(String phrase) {
+        return Arrays.stream(phrase.split(" "))
+                .map(word -> word.split("(?i)(?=[aeiou])",2))
+                .map(sets -> punctuate((sets[0].matches("(?i)(?=[aeiou]).*"))
+                        ? (sets[0] + sets[1] + "-way")
+                        : (sets[1] + "-" + sets[0] + "ay")))
+                .collect(Collectors.joining(" "));
+    }
+
     public static String punctuate(String word) {
-        for(int i = 0; i<word.length(); i++) {
-            if(!Character.isLetter(word.charAt(i)) && word.charAt(i) != '-') {
-                return word.substring(0,i) + word.substring(i+1) + word.charAt(i);
+        for (int i = 0; i < word.length(); i++) {
+            if (!Character.isLetterOrDigit(word.charAt(i)) && word.charAt(i) != '-' && word.charAt(i) != '\'') {
+                return word.substring(0, i) + word.substring(i + 1) + word.charAt(i);
             }
         }
         return word;
